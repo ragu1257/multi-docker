@@ -8,21 +8,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Login to Docker Hub
-        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-        run: docker build -t ragu1257/react-test -f ./client/Dockerfile.dev ./client
-        run: docker run -e CI=true ragu1257/react-test npm test
+      - uses: actions/checkout@v3
+      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker build -t ragu1257/react-test -f ./client/Dockerfile.dev ./client
+      - run: docker run -e CI=true ragu1257/react-test npm test
 
-      - name: Build images
-        run: docker build -t ragu1257/multi-client ./client
-        run: docker build -t ragu1257/multi-nginx ./nginx
-        run: docker build -t ragu1257/multi-server ./server
-        run: docker build -t ragu1257/multi-worker ./worker
+      - run: docker build -t ragu1257/multi-client ./client
+      - run: docker build -t ragu1257/multi-nginx ./nginx
+      - run: docker build -t ragu1257/multi-server ./server
+      - run: docker build -t ragu1257/multi-worker ./worker
 
-      - name: Push images
-        run: docker push ragu1257/multi-client
-        run: docker push ragu1257/multi-nginx
-        run: docker push ragu1257/multi-server
-        run: docker push ragu1257/multi-worker
+      - run: docker push ragu1257/multi-client
+      - run: docker push ragu1257/multi-nginx
+      - run: docker push ragu1257/multi-server
+      - run: docker push ragu1257/multi-worker
